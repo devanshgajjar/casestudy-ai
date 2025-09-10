@@ -47,13 +47,13 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
     const updated = await prisma.caseStudy.update({ where: { id }, data: { content: markdown } });
     return NextResponse.json({ content: updated.content });
-  } catch (e: any) {
+  } catch (e: unknown) {
     console.error('AI draft error:', e);
     return NextResponse.json({ error: String(e?.message ?? e) }, { status: 500 });
   }
 }
 
-function generateFallbackContent(title: string, templateId: string, answers: Record<string, any>): string {
+function generateFallbackContent(title: string, templateId: string, answers: Record<string, unknown>): string {
   const kpi = answers.primary_kpi;
   const delta = kpi && kpi.before && kpi.after ? 
     `${kpi.before}${kpi.unit} → ${kpi.after}${kpi.unit} (**${Math.round(((kpi.after - kpi.before) / kpi.before) * 100)}%**)` : 

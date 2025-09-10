@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
             create: { id: localId, email: "anon@local" },
           });
           ownerId = u.id;
-        } catch (e) {
+        } catch (e: unknown) {
           const u2 = await prisma.user.findFirst({ where: { email: "anon@local" } });
           ownerId = u2?.id ?? localId;
         }
@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
     }
     const cs = await prisma.caseStudy.create({ data: { title, template, userId: ownerId!, status: "draft" } });
     return NextResponse.json({ id: cs.id }, { status: 201 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("create case study error:", error);
     return NextResponse.json({ error: String(error?.message ?? error) }, { status: 500 });
   }

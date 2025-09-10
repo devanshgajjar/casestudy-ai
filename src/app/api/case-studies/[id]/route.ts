@@ -47,10 +47,10 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
       title?: string; 
       status?: string; 
       content?: string; 
-      answers?: Record<string, any>;
+      answers?: Record<string, unknown>;
     };
     
-    const updates: any = {};
+    const updates: Record<string, unknown> = {};
     if (title !== undefined) updates.title = title;
     if (status !== undefined) updates.status = status;
     if (content !== undefined) updates.content = content;

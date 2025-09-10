@@ -1,12 +1,12 @@
 "use client";
 import useSWR from "swr";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
-export default function ShowcasePage() {
+function ShowcaseContent() {
   const searchParams = useSearchParams();
   const designerParam = searchParams.get('designer');
   
@@ -294,5 +294,18 @@ export default function ShowcasePage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ShowcasePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+        <p className="mt-4 text-gray-600">Loading showcase...</p>
+      </div>
+    </div>}>
+      <ShowcaseContent />
+    </Suspense>
   );
 }
