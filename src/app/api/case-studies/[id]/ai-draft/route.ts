@@ -11,7 +11,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     const { answers: bodyAnswers, template: bodyTemplate } = body;
 
     const apiKey = process.env.OPENAI_API_KEY;
-    const cs = await prisma.caseStudy.findUnique({ where: { id } });
+    const cs = await prisma.CaseStudy.findUnique({ where: { id } });
     if (!cs) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
     // Parse existing answers or use provided ones
@@ -45,7 +45,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       markdown = await callOpenAIChat({ apiKey, system: systemPrompt, user: userPrompt });
     }
 
-    const updated = await prisma.caseStudy.update({ where: { id }, data: { content: markdown } });
+    const updated = await prisma.CaseStudy.update({ where: { id }, data: { content: markdown } });
     return NextResponse.json({ content: updated.content });
   } catch (e: unknown) {
     console.error('AI draft error:', e);
