@@ -1,13 +1,25 @@
 "use client";
 import useSWR from "swr";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { templates } from "@/lib/schemas";
 const fetcher = (u: string) => fetch(u).then((r) => r.json());
 
 export default function DashboardPage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const { data, mutate } = useSWR<{ items: any[] }>("/api/case-studies", fetcher);
   const [showTemplateModal, setShowTemplateModal] = useState(false);
+
+  useEffect(() => {
+    if (status === "loading") return; // Still loading
+    if (!session) {
+      router.push("/auth/signin");
+      return;
+    }
+  }, [session, status, router]);
 
   async function createWithTemplate(templateId: string) {
     try {
@@ -39,6 +51,21 @@ export default function DashboardPage() {
       console.error("Error creating case study:", error);
       alert("Error creating case study. Check console for details.");
     }
+  }
+
+  if (status === "loading") {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!session) {
+    return null; // Will redirect
   }
 
   return (
