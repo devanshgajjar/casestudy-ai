@@ -11,7 +11,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       return NextResponse.json({ error: "Invalid case study ID" }, { status: 400 });
     }
     
-    const cs = await prisma.caseStudy.findUnique({ where: { id } });
+    const cs = await prisma.CaseStudy.findUnique({ where: { id } });
     if (!cs) return NextResponse.json({ error: "Not found" }, { status: 404 });
     
     let parsedAnswers = {};
@@ -57,12 +57,12 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     if (answers !== undefined) updates.answers = JSON.stringify(answers);
     
     // Check if case study exists first
-    const existingCS = await prisma.caseStudy.findUnique({ where: { id } });
+    const existingCS = await prisma.CaseStudy.findUnique({ where: { id } });
     if (!existingCS) {
       return NextResponse.json({ error: "Case study not found" }, { status: 404 });
     }
     
-    const cs = await prisma.caseStudy.update({ where: { id }, data: updates });
+    const cs = await prisma.CaseStudy.update({ where: { id }, data: updates });
     
     let parsedAnswers = {};
     try {
