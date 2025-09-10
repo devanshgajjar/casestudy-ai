@@ -26,23 +26,20 @@ export async function POST(req: NextRequest) {
     // Ensure a local user exists when auth is disabled
     let ownerId = userId;
     if (!ownerId) {
-      const existingByEmail = await prisma.User.findUnique({ where: { email: "anon@local" } }).catch(() => null);
-      if (existingByEmail) {
-        ownerId = existingByEmail.id;
-      } else {
-        const localId = "local";
-        try {
-          const u = await prisma.User.upsert({
-            where: { id: localId },
-            update: {},
-            create: { id: localId, email: "anon@local" },
-          });
-          ownerId = u.id;
-        } catch (e: unknown) {
-          const u2 = await prisma.User.findFirst({ where: { email: "anon@local" } });
-          ownerId = u2?.id ?? localId;
-        }
+      // Try to find existing default user
+      let defaultUser = await prisma.User.findUnique({ where: { email: "anon@local" } }).catch(() => null);
+      
+      if (!defaultUser) {
+        // Create a new default user (let database generate UUID)
+        defaultUser = await prisma.User.create({
+          data: { 
+            email: "anon@local",
+            passwordHash: "no-password" 
+          }
+        });
       }
+      
+      ownerId = defaultUser.id;
     }
     const cs = await prisma.CaseStudy.create({ data: { title, template, userId: ownerId!, status: "draft" } });
     return NextResponse.json({ id: cs.id }, { status: 201 });

@@ -17,8 +17,7 @@ export default function DashboardPage() {
         headers: { "Content-Type": "application/json" }, 
         body: JSON.stringify({ 
           title: `New ${template?.name || 'Case Study'}`, 
-          template: templateId, 
-          userId: "local" 
+          template: templateId
         }) 
       });
       if (!res.ok) {
