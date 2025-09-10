@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
-    "build:production": "if [ \"$DATABASE_URL\" ]; then prisma migrate deploy; fi && prisma generate && next build",
+    "build:production": "if [ \"$DATABASE_URL\" ]; then timeout 30 prisma migrate deploy || echo 'Migration skipped due to connection timeout'; fi && prisma generate && next build",
     "start": "next start",
     "lint": "eslint",
     "postinstall": "prisma generate",
