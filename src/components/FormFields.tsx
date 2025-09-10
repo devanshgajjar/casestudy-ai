@@ -73,7 +73,7 @@ function TextInput({ field, value, onChange }: FormFieldProps) {
         {field.req && <span className="text-red-500 ml-1">*</span>}
       </label>
       <textarea
-        className="w-full border border-gray-300 rounded-lg p-4 h-28 resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white hover:border-gray-400"
+        className="w-full border border-gray-300 rounded-lg p-4 h-28 resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white hover:border-gray-400 text-gray-900 placeholder-gray-500"
         placeholder={field.placeholder}
         value={value || ''}
         onChange={(e) => onChange(e.target.value)}
@@ -163,7 +163,7 @@ function ListInput({ field, value, onChange }: FormFieldProps) {
           <div key={index} className="flex gap-2">
             <input
               type="text"
-              className="flex-1 border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              className="flex-1 border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-900 placeholder-gray-500 bg-white"
               placeholder={`Item ${index + 1}`}
               value={item}
               onChange={(e) => updateItem(index, e.target.value)}
@@ -360,7 +360,7 @@ function KPIInput({ field, value, onChange }: FormFieldProps) {
         <input
           type="text"
           placeholder="KPI name (e.g., Conversion rate)"
-          className="col-span-2 border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+          className="col-span-2 border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-900 placeholder-gray-500 bg-white"
           value={kpi.name}
           onChange={(e) => updateKPI({ name: e.target.value })}
         />
@@ -369,7 +369,7 @@ function KPIInput({ field, value, onChange }: FormFieldProps) {
           <input
             type="number"
             placeholder="0"
-            className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+            className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-900 placeholder-gray-500 bg-white"
             value={kpi.before || ''}
             onChange={(e) => updateKPI({ before: parseFloat(e.target.value) || 0 })}
           />
@@ -379,7 +379,7 @@ function KPIInput({ field, value, onChange }: FormFieldProps) {
           <input
             type="number"
             placeholder="0"
-            className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+            className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-900 placeholder-gray-500 bg-white"
             value={kpi.after || ''}
             onChange={(e) => updateKPI({ after: parseFloat(e.target.value) || 0 })}
           />
@@ -387,7 +387,7 @@ function KPIInput({ field, value, onChange }: FormFieldProps) {
         <input
           type="text"
           placeholder="Unit (%, s, etc.)"
-          className="col-span-2 border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+          className="col-span-2 border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-900 placeholder-gray-500 bg-white"
           value={kpi.unit}
           onChange={(e) => updateKPI({ unit: e.target.value })}
         />
