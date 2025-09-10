@@ -7,7 +7,7 @@ export async function GET() {
     await prisma.$connect();
     
     // Test if User table exists
-    const userCount = await prisma.user.count();
+    const userCount = await prisma.User.count();
     
     return NextResponse.json({
       status: "success",
