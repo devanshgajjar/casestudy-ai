@@ -89,7 +89,7 @@ dist
 
 # Gatsby files
 .cache/
-public
+# public folder (keep commented - we want to track API routes in src/app/api/public/)
 
 # Storybook build outputs
 .out
