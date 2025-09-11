@@ -2,7 +2,7 @@ export const sampleCaseStudies = [
   {
     id: "sample-ui-redesign",
     title: "E-commerce Mobile App Redesign",
-    template: "ui-ux",
+    template: "ui",
     status: "published",
     content: `# E-commerce Mobile App Redesign
 
@@ -59,7 +59,7 @@ Users were abandoning their shopping carts at an alarming rate of 68%. The check
   {
     id: "sample-saas-growth",
     title: "SaaS Dashboard Optimization",
-    template: "ui-ux", 
+    template: "ux", 
     status: "published",
     content: `# SaaS Dashboard Optimization
 
