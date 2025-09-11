@@ -10,7 +10,11 @@ const fetcher = (u: string) => fetch(u).then((r) => r.json());
 export default function DashboardPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const { data, mutate } = useSWR<{ items: any[] }>("/api/case-studies", fetcher);
+  const { data, mutate } = useSWR<{ items: any[] }>("/api/case-studies", (url) => 
+    fetch(url, { 
+      credentials: 'include' // Ensure cookies are sent
+    }).then((r) => r.json())
+  );
   const [showTemplateModal, setShowTemplateModal] = useState(false);
 
   useEffect(() => {
@@ -27,6 +31,7 @@ export default function DashboardPage() {
       const res = await fetch("/api/case-studies", { 
         method: "POST", 
         headers: { "Content-Type": "application/json" }, 
+        credentials: 'include', // Ensure cookies are sent
         body: JSON.stringify({ 
           title: `New ${template?.name || 'Case Study'}`, 
           template: templateId
