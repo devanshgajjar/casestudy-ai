@@ -1,8 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const session = await getServerSession(authOptions);
+    
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { id } = await params;
     
     // Validate ID
@@ -11,7 +19,18 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       return NextResponse.json({ error: "Invalid case study ID" }, { status: 400 });
     }
     
-    const cs = await prisma.CaseStudy.findUnique({ where: { id } });
+    // Only allow access to user's own case studies, excluding samples
+    const cs = await prisma.CaseStudy.findFirst({ 
+      where: { 
+        id,
+        userId: session.user.id,
+        NOT: {
+          id: {
+            startsWith: "sample-"
+          }
+        }
+      } 
+    });
     if (!cs) return NextResponse.json({ error: "Not found" }, { status: 404 });
     
     let parsedAnswers = {};
@@ -34,6 +53,12 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const session = await getServerSession(authOptions);
+    
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { id } = await params;
     
     // Validate ID
@@ -56,13 +81,29 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     if (content !== undefined) updates.content = content;
     if (answers !== undefined) updates.answers = JSON.stringify(answers);
     
-    // Check if case study exists first
-    const existingCS = await prisma.CaseStudy.findUnique({ where: { id } });
+    // Check if case study exists and belongs to user (excluding samples)
+    const existingCS = await prisma.CaseStudy.findFirst({ 
+      where: { 
+        id,
+        userId: session.user.id,
+        NOT: {
+          id: {
+            startsWith: "sample-"
+          }
+        }
+      } 
+    });
     if (!existingCS) {
       return NextResponse.json({ error: "Case study not found" }, { status: 404 });
     }
     
-    const cs = await prisma.CaseStudy.update({ where: { id }, data: updates });
+    const cs = await prisma.CaseStudy.update({ 
+      where: { 
+        id,
+        userId: session.user.id 
+      }, 
+      data: updates 
+    });
     
     let parsedAnswers = {};
     try {
