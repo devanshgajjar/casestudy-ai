@@ -226,49 +226,115 @@ function ShowcaseContent() {
                 className="group bg-white rounded-xl border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all duration-200 overflow-hidden"
               >
                 {/* Preview Image/Content */}
-                <div className="h-48 bg-gradient-to-br from-blue-50 to-indigo-100 p-6 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-3 mx-auto">
-                      <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        {caseStudy.template === 'ui' && (
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v6a2 2 0 002 2h4a2 2 0 002-2V5zM21 15a2 2 0 00-2-2h-4a2 2 0 00-2 2v2a4 4 0 004 4h2a2 2 0 002-2v-2z" />
-                        )}
-                        {caseStudy.template === 'ux' && (
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                        )}
-                        {caseStudy.template === 'social' && (
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2M7 4h10M7 4l-2 16h14l-2-16" />
-                        )}
-                      </svg>
+                <div className={`h-48 p-6 flex items-center justify-center relative overflow-hidden ${
+                  caseStudy.template === 'ui' 
+                    ? 'bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50' 
+                    : caseStudy.template === 'ux'
+                    ? 'bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50'
+                    : 'bg-gradient-to-br from-pink-50 via-rose-50 to-orange-50'
+                }`}>
+                  <div className="text-center relative z-10">
+                    <div className={`w-20 h-20 rounded-2xl flex items-center justify-center mb-4 mx-auto shadow-lg ${
+                      caseStudy.template === 'ui'
+                        ? 'bg-gradient-to-br from-blue-500 to-indigo-600'
+                        : caseStudy.template === 'ux'
+                        ? 'bg-gradient-to-br from-emerald-500 to-teal-600'
+                        : 'bg-gradient-to-br from-pink-500 to-rose-600'
+                    }`}>
+                      {caseStudy.template === 'ui' && (
+                        <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
+                        </svg>
+                      )}
+                      {caseStudy.template === 'ux' && (
+                        <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      )}
+                      {caseStudy.template === 'social' && (
+                        <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2M7 4h10M7 4l-2 16h14l-2-16m-5-3v4m0 0l-2-2m2 2l2-2" />
+                        </svg>
+                      )}
                     </div>
-                    <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
-                      {caseStudy.title}
-                    </h3>
+                    
+                    {/* KPI Preview */}
+                    {caseStudy.answers?.primary_kpi && (
+                      <div className="bg-white/80 backdrop-blur-sm rounded-lg px-3 py-2 mb-2">
+                        <div className="text-xs text-gray-600 font-medium">{caseStudy.answers.primary_kpi.name}</div>
+                        <div className="text-lg font-bold text-gray-900">
+                          {caseStudy.answers.primary_kpi.before}{caseStudy.answers.primary_kpi.unit} → {caseStudy.answers.primary_kpi.after}{caseStudy.answers.primary_kpi.unit}
+                        </div>
+                        <div className={`text-sm font-semibold ${
+                          ((caseStudy.answers.primary_kpi.after - caseStudy.answers.primary_kpi.before) / caseStudy.answers.primary_kpi.before * 100) > 0 
+                            ? 'text-green-600' 
+                            : 'text-red-600'
+                        }`}>
+                          {Math.round((caseStudy.answers.primary_kpi.after - caseStudy.answers.primary_kpi.before) / caseStudy.answers.primary_kpi.before * 100) > 0 ? '+' : ''}
+                          {Math.round((caseStudy.answers.primary_kpi.after - caseStudy.answers.primary_kpi.before) / caseStudy.answers.primary_kpi.before * 100)}%
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Background decoration */}
+                  <div className="absolute top-0 right-0 w-32 h-32 opacity-10">
+                    <div className={`w-full h-full rounded-full ${
+                      caseStudy.template === 'ui'
+                        ? 'bg-blue-300'
+                        : caseStudy.template === 'ux'
+                        ? 'bg-emerald-300'
+                        : 'bg-pink-300'
+                    }`}></div>
                   </div>
                 </div>
 
                 {/* Content */}
                 <div className="p-6">
-                  <div className="flex items-center space-x-3 mb-4">
-                    <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium capitalize">
-                      {caseStudy.template}
-                    </span>
-                    <span className="text-sm text-gray-500">
-                      by {caseStudy.designer}
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="font-bold text-lg text-gray-900 group-hover:text-blue-600 transition-colors truncate">
+                      {caseStudy.title}
+                    </h3>
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                      caseStudy.template === 'ui'
+                        ? 'bg-blue-100 text-blue-700'
+                        : caseStudy.template === 'ux'
+                        ? 'bg-emerald-100 text-emerald-700'
+                        : 'bg-pink-100 text-pink-700'
+                    }`}>
+                      {caseStudy.template.toUpperCase()}
                     </span>
                   </div>
                   
-                  {/* Extract goal or summary from answers */}
-                  <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">
-                    {caseStudy.answers?.goal || caseStudy.answers?.objective || "A design case study showcasing real-world problem solving and results."}
+                  {/* Extract meaningful problem/goal */}
+                  <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-2" style={{display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden'}}>
+                    {caseStudy.answers?.user_problem || 
+                     caseStudy.answers?.goal || 
+                     caseStudy.answers?.objective || 
+                     caseStudy.answers?.why_matters ||
+                     "Professional case study showcasing design process and measurable impact."}
                   </p>
                   
-                  <div className="flex items-center justify-between text-sm text-gray-500">
-                    <span>
+                  {/* Timeframe and Impact */}
+                  <div className="flex items-center justify-between text-sm mb-4">
+                    <div className="flex items-center space-x-4">
+                      {caseStudy.answers?.timeframe && (
+                        <span className="text-gray-500">
+                          📅 {caseStudy.answers.timeframe}
+                        </span>
+                      )}
+                      <span className="text-gray-500">
+                        by {caseStudy.designer}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-gray-400">
                       {new Date(caseStudy.updatedAt).toLocaleDateString()}
                     </span>
-                    <span className="group-hover:text-blue-600 transition-colors">
-                      Read more →
+                    <span className="text-sm font-medium text-blue-600 group-hover:text-blue-700 transition-colors">
+                      Read full study →
                     </span>
                   </div>
                 </div>
